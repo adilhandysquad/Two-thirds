@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Two-Thirds Community Foundation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: #0a1a1a;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ── Liquid Glass ── */
+    .liquid-glass {
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.12);
+      position: relative;
+      overflow: hidden;
+    }
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg,
+        rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.1) 20%,
+        rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+        rgba(255,255,255,0.1) 80%, rgba(255,255,255,0.35) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ── Hero wrapper ── */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Video BG ── */
+    #hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* ── Gentle teal-to-transparent top gradient for text readability ── */
+    .video-tint {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(8, 42, 38, 0.45) 0%,
+        rgba(8, 42, 38, 0.1) 45%,
+        rgba(8, 42, 38, 0.5) 100%
+      );
+      z-index: 1;
+    }
+
+    /* ── Navbar ── */
+    nav {
+      position: relative;
+      z-index: 10;
+      padding: 1.5rem 4rem 0;
+    }
+    .nav-bar {
+      border-radius: 1rem;
+      padding: 0.6rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+    }
+    .nav-logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-text span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 300;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.7);
+    }
+    .nav-links {
+      display: none;
+      list-style: none;
+      gap: 2.5rem;
+    }
+    @media (min-width: 768px) { .nav-links { display: flex; } }
+    .nav-links a {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .nav-links a:hover { color: #5eead4; }
+    .nav-cta {
+      background: #fff;
+      color: #082a26;
+      padding: 0.55rem 1.5rem;
+      border-radius: 0.6rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .nav-cta:hover { background: #ccfbf1; transform: translateY(-1px); }
+
+    /* ── Hero content ── */
+    .hero-body {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 4rem 4rem;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: end;
+      gap: 2rem;
+    }
+    @media (min-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Heading */
+    .hero-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.4rem, 5.5vw, 5rem);
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      margin-bottom: 1.25rem;
+      color: #fff;
+    }
+    .hero-heading em {
+      font-style: italic;
+      color: #5eead4;
+    }
+
+    /* Char animation */
+    .char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .char.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Subheading */
+    .hero-sub {
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      color: rgba(255,255,255,0.78);
+      font-weight: 300;
+      line-height: 1.65;
+      max-width: 520px;
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .hero-sub.visible { opacity: 1; }
+
+    /* Buttons */
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .hero-buttons.visible { opacity: 1; }
+    .btn-primary {
+      background: #fff;
+      color: #082a26;
+      padding: 0.85rem 2rem;
+      border-radius: 0.6rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: #ccfbf1; transform: translateY(-2px); }
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      padding: 0.85rem 2rem;
+      border-radius: 0.6rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { background: #fff; color: #082a26; transform: translateY(-2px); }
+
+    /* Right column tag */
+    .hero-tag-col {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+    @media (min-width: 1024px) {
+      .hero-tag-col { justify-content: flex-end; }
+    }
+    .hero-tag {
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 1.25rem 1.75rem;
+      border-radius: 1rem;
+      opacity: 0;
+      transition: opacity 1s ease;
+      max-width: 320px;
+    }
+    .hero-tag.visible { opacity: 1; }
+    .hero-tag-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5eead4;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .hero-tag-text {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* Wave decoration */
+    .wave-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 5;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    /* Responsive padding adjustments */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem 0; }
+      .hero-body { padding: 0 1.25rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<section id="hero">
+  <!-- Background video -->
+  <video id="hero-video" autoplay loop muted playsinline>
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4" type="video/mp4">
+  </video>
+
+  <!-- Subtle color tint for readability only -->
+  <div class="video-tint"></div>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-bar liquid-glass">
+      <div class="nav-logo">
+        <!-- Starfish-inspired logo mark -->
+        <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="17" fill="rgba(94,234,212,0.15)" stroke="rgba(94,234,212,0.5)" stroke-width="1"/>
+          <path d="M18 6 L19.8 14.4 L28 11 L21.6 17 L28 23 L19.8 21.6 L18 30 L16.2 21.6 L8 23 L14.4 17 L8 11 L16.2 14.4 Z" fill="#5eead4" opacity="0.9"/>
+        </svg>
+        <div class="nav-logo-text">
+          Two-Thirds
+          <span>Community Foundation</span>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Focus Areas</a></li>
+        <li><a href="#">Impact</a></li>
+        <li><a href="#">Partner</a></li>
+      </ul>
+
+      <button class="nav-cta">Donate Now</button>
+    </div>
+  </nav>
+
+  <!-- Hero Content -->
+  <div class="hero-body">
+    <div class="hero-grid">
+
+      <!-- Left: Main content -->
+      <div>
+        <h1 class="hero-heading" id="hero-heading" aria-label="For the two-thirds who deserve better.">
+          <!-- JS will inject animated chars -->
+        </h1>
+
+        <p class="hero-sub" id="hero-sub">
+          Empowering coastal and marginalized communities through sustainable livelihoods, education, and genuine partnership — rooted in grassroots trust.
+        </p>
+
+        <div class="hero-buttons" id="hero-buttons">
+          <button class="btn-primary">Support Our Mission</button>
+          <button class="btn-secondary liquid-glass">Explore Our Work</button>
+        </div>
+      </div>
+
+      <!-- Right: Tag -->
+      <div class="hero-tag-col">
+        <div class="hero-tag liquid-glass" id="hero-tag">
+          <div class="hero-tag-label">Registered · Section 8 NGO</div>
+          <div class="hero-tag-text">Education. Livelihoods.<br>Climate. Community.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Decorative wave -->
+  <svg class="wave-bar" viewBox="0 0 1440 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,20 C240,40 480,0 720,20 C960,40 1200,0 1440,20 L1440,40 L0,40 Z" fill="white"/>
+  </svg>
+</section>
+
+<script>
+  // ── Animated Heading ──
+  const lines = [
+    "For the two-thirds",
+    "who deserve better."
+  ];
+  const charDelay = 28;
+  const initialDelay = 200;
+  const heading = document.getElementById('hero-heading');
+
+  lines.forEach((line, li) => {
+    const lineDiv = document.createElement('div');
+    const chars = line.split('');
+    chars.forEach((ch, ci) => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      // Teal color for key word
+      if (li === 0 && ci >= 8 && ci <= 16) {
+        span.style.color = '#5eead4';
+      }
+      const delay = initialDelay + (li * line.length * charDelay) + (ci * charDelay);
+      setTimeout(() => { span.classList.add('visible'); }, delay);
+      lineDiv.appendChild(span);
+    });
+    heading.appendChild(lineDiv);
+  });
+
+  // ── Fade-ins ──
+  function fadeIn(id, delay) {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('visible');
+    }, delay);
+  }
+
+  fadeIn('hero-sub', 900);
+  fadeIn('hero-buttons', 1300);
+  fadeIn('hero-tag', 1600);
+</script>
+</body>
+</html>
